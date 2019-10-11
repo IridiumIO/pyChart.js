@@ -1,6 +1,6 @@
 import inspect
 import json
-from chartjs.builderutils import ExtChartUtils, FunctionsNotAllowedError
+from objectivechartjs.builderutils import ExtChartUtils, FunctionsNotAllowedError
 
 class BaseChart:
   

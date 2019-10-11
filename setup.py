@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Django-ObjectiveChartJS",
-    version="0.0.3",
+    version="0.0.4",
     author="Iridium IO",
     author_email="iridium.io@outlook.com",
     description="A clean, class-based implementation of Chart.JS",
