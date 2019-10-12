@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/IridiumIO/pyChart.js/blob/master/data/banner.png" width="500"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/IridiumIO/pyChart.js/master/data/banner.png" width="500"></p>
 
 &nbsp;
 
@@ -13,25 +13,18 @@ Initially designed as a Django app, it is now self-contained and outputs chart d
 - AJAX/Rest API requests
 - Other Python projects
 
-## Prerequisites
-You will need to have a copy of `chart.js` or `chart.min.js` ready for use in your HTML documents:
-
-```HTML
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-```
 
 ## Getting Started
 
-1. Install with `pip` (coming soon)
+Install with `pip`
 
 ```sh
 > pip install pychart.js
 ```
+You will need to have `chart.js` or `chart.min.js` ready for use in your HTML document. The following is a drop-in CDN script to use:
 
-2. Import into projects
-
-```python
-from pychartjs import BaseChart, ChartType
+```HTML
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 ```
 
 ## Basic Usage
