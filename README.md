@@ -1,6 +1,11 @@
-# pyChart.JS for Python and Django
+<p align="center"><img src="data/banner.svg" width="500"></p>
 
-An easy to use, class-based approach to implementing Chart.js into Python projects.
+&nbsp;
+
+<p align="center"><b>An easy to use, class-based approach to implementing Chart.js into Python projects.</b></p>
+
+-----
+
 Initially designed as a Django app, it is now self-contained and outputs chart data in JSON, meaning it can easily be used in: 
 
 - Django
