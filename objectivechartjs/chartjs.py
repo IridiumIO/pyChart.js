@@ -24,13 +24,13 @@ class BaseChart:
         cleanLabels = ExtChartUtils.cleanClass(self.labels, list)
 
         if not cleanLabels:
-
-            if hasattr(self.datasets, 'data'):
-                for i in range(len(self.datasets.data)):
+            cleanData = ExtChartUtils.cleanClass(self.datasets)
+            if 'data' in cleanData.keys():
+                for i in range(len(cleanData['data'])):
                     cleanLabels.append(f'Data{i}')
 
-            elif hasattr(self.datasets.set1, 'data'):
-                for i in range(len(self.datasets.set1.data)):
+            elif hasattr(cleanData[next(iter(cleanData))], 'data'):
+                for i in range(len(cleanData[next(iter(cleanData))].data)):
                     cleanLabels.append(f'Data{i}')
         if len(cleanLabels) == 1: 
             cleanLabels = cleanLabels[0]
@@ -101,5 +101,7 @@ class BaseChart:
         build.update({'data': datastructure})
         build.update(options)
 
-        return json.dumps(build)
+        js = json.dumps(build)
+        js = js.replace('"<<', '').replace('>>"', '')
+        return js
 
