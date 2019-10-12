@@ -10,7 +10,7 @@ class BaseChart:
     class labels:
         pass
 
-    class datasets:
+    class data:
         pass
 
     class options:
@@ -24,7 +24,7 @@ class BaseChart:
         cleanLabels = ExtChartUtils.cleanClass(self.labels, list)
 
         if not cleanLabels:
-            cleanData = ExtChartUtils.cleanClass(self.datasets)
+            cleanData = ExtChartUtils.cleanClass(self.data)
             if 'data' in cleanData.keys():
                 for i in range(len(cleanData['data'])):
                     cleanLabels.append(f'Data{i}')
@@ -48,7 +48,7 @@ class BaseChart:
 
     def getDatasets(self):  # TODO:: Add catch for misnamed subsets
 
-        cleanDatasets = ExtChartUtils.cleanClass(self.datasets)
+        cleanDatasets = ExtChartUtils.cleanClass(self.data)
 
         subSets = dict([(x, cleanDatasets[x]) for x in cleanDatasets if inspect.isclass(cleanDatasets[x])])
         subFunc = [x for x in cleanDatasets if inspect.isfunction(cleanDatasets[x])]
@@ -60,10 +60,10 @@ class BaseChart:
         if not subSets:
             content.append(cleanDatasets)
 
-        for data in subSets:
-            subclass = subSets[data]
+        for dataSet in subSets:
+            subclass = subSets[dataSet]
             if not hasattr(subclass, 'label'):
-                subclass.label = data
+                subclass.label = dataSet
             content.append(ExtChartUtils.cleanClass(subclass))
 
         return {'datasets': content}
