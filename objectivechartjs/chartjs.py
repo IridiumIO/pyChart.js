@@ -32,6 +32,9 @@ class BaseChart:
             elif hasattr(self.datasets.set1, 'data'):
                 for i in range(len(self.datasets.set1.data)):
                     cleanLabels.append(f'Data{i}')
+        if len(cleanLabels) == 1: 
+            cleanLabels = cleanLabels[0]
+
 
         return {'labels': cleanLabels}
 
