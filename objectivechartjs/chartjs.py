@@ -1,9 +1,11 @@
 import inspect
 import json
-from objectivechartjs.builderutils import ExtChartUtils, FunctionsNotAllowedError
+from objectivechartjs.builderutils import ExtChartUtils, ChartType, FunctionsNotAllowedError
 
 class BaseChart:
-  
+    
+    type = ChartType.Bar
+    
     class labels:
         pass
     
@@ -16,52 +18,58 @@ class BaseChart:
     class pluginOptions:
         pass
 
-    
-    def __init__(self, *args, **kwargs):
-        self.__impDataSets__ = ExtChartUtils.cleanClass(self.datasets) 
-        self.__impOptions__ = ExtChartUtils.cleanClass(self.options) 
-        self.__impLabels__ = ExtChartUtils.cleanClass(self.labels, list)
-        self.__impPluginOptions__ = ExtChartUtils.cleanClass(self.pluginOptions)
         
-        if not self.__impLabels__:
-            if hasattr(self.datasets, 'data'):
-                varx = len(self.datasets.data)
-                for i in range(varx): 
-                    self.__impLabels__.append(f'Data{i}')
-            elif hasattr(self.datasets.set1, 'data'):
-                varx = len(self.datasets.set1.data)
-                for i in range(varx): 
-                    self.__impLabels__.append(f'Data{i}')
+ 
 
     def getLabels(self):
-        return {"labels" : self.__impLabels__}
+        cleanLabels = ExtChartUtils.cleanClass(self.labels, list)
+        
+        if not cleanLabels:   
+            
+            if hasattr(self.datasets, 'data'):   
+                for i in range(len(self.datasets.data)): 
+                    cleanLabels.append(f'Data{i}')
+                    
+            elif hasattr(self.datasets.set1, 'data'):
+                for i in range(len(self.datasets.set1.data)): 
+                    cleanLabels.append(f'Data{i}')
+        
+        
+        return {"labels" : cleanLabels}
+
 
     def getOptions(self):
-        options = self.__impOptions__
-        options.update(self.getPluginOptions())
-        return {"options" : options}
+        
+        cleanOptions = ExtChartUtils.cleanClass(self.options)     
+        cleanOptions.update(self.getPluginOptions())
+        return {"options" : cleanOptions}
 
-    def getDatasets(self):
 
-        # TODO:: Add catch for misnamed subsets
-
-        subSets = dict([(x, self.__impDataSets__[x]) for x in self.__impDataSets__ if inspect.isclass(self.__impDataSets__[x]) and x.startswith('set')]) 
-        subFunc = [x for x in self.__impDataSets__ if inspect.isfunction(self.__impDataSets__[x])]    
+    def getDatasets(self):          # TODO:: Add catch for misnamed subsets
+        
+        cleanDatasets = ExtChartUtils.cleanClass(self.datasets) 
+        
+        subSets = dict([(x, cleanDatasets[x]) for x in cleanDatasets if inspect.isclass(cleanDatasets[x])])
+        subFunc = [x for x in cleanDatasets if inspect.isfunction(cleanDatasets[x])]
         
         if subFunc: raise FunctionsNotAllowedError()
 
         content = []
-        if not subSets: content.append(self.__impDataSets__)
+        if not subSets: 
+            content.append(cleanDatasets)
 
         for data in subSets: 
             subclass = subSets[data]
+            if not hasattr(subclass, 'label'): subclass.label = data
             content.append(ExtChartUtils.cleanClass(subclass))
 
         return {'datasets': content}
 
     
     def getPluginOptions(self):
-        target = self.__impPluginOptions__
+        cleanPluginOptions = ExtChartUtils.cleanClass(self.pluginOptions)
+        
+        target = cleanPluginOptions
         plugins = dict([(x, target[x]) for x in target if inspect.isclass(target[x])])
         otherOptions = dict([(x, target[x]) for x in target if not inspect.isclass(target[x])])
 
@@ -74,17 +82,21 @@ class BaseChart:
         
         return({"plugins": content})
 
-    def buildJSON(self):
-        datasets = self.getDatasets()
-        labels = self.getLabels()
+
+    def get(self):
+
         datastructure = {}
-        datastructure.update(labels)
-        datastructure.update(datasets)
+        datastructure.update(self.getLabels())
+        datastructure.update(self.getDatasets())
         
         options = self.getOptions()
-
-        build = {"data": datastructure}
+        
+        if type(self.type) is not str: self.type = self.type.value
+        
+        build = {"type" : self.type}
+        build.update({"data": datastructure})
         build.update(options)
 
         return json.dumps(build)
+
 

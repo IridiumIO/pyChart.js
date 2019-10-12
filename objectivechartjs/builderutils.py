@@ -1,44 +1,36 @@
 import inspect
 import json
+from enum import Enum
+
+
+class ChartType(Enum):
+        
+    Line = 'line'
+    Bar = 'bar'
+    Pie = 'pie'
+    Doughnut = 'doughnut'
+    Radar = 'radar'
+    PolarArea = 'polarArea'
+    HorizontalBar = 'horizontalBar'
+    Mixed = 'bar'
+    Bubble = 'bubble'
+
 
 class ExtChartUtils:
 
     @classmethod
-    def merge(cls, dict1, dict2):
-        if type(dict1) is not dict: dict1 = cls.clean(dict1)
-        if type(dict2) is not dict: dict2 = cls.clean(dict2)
-        return(dict1.update(dict2))
-
-    @classmethod
-    def cleanDict(cls, classObj):
-        
-        if classObj is None: return {}
-        
-        variables = vars(classObj)
-        xn = dict([(n, variables[n]) for n in variables if (not n.startswith('_') and not inspect.isfunction(variables[n]))])
-        return xn
-    
-    @classmethod
     def cleanClass(cls, classObj, retType=dict):
         
-        if classObj is None: return []
-        
+        if classObj is None: 
+            return [] 
         variables = vars(classObj)
         
         if retType is list:
-            xn = [variables[n] for n in variables if (not n.startswith('_') and not inspect.isfunction(variables[n]))]
+            cleaned = [variables[n] for n in variables if (not n.startswith('_') and not inspect.isfunction(variables[n]))]
         else:
-            xn = dict([(n, variables[n]) for n in variables if (not n.startswith('_') and not inspect.isfunction(variables[n]))])
-        return xn
+            cleaned = dict([(n, variables[n]) for n in variables if (not n.startswith('_') and not inspect.isfunction(variables[n]))])
+        return cleaned
     
-    @classmethod
-    def BuildJSON(cls, parentClass, Dict):
-        dict_ = cls.cleanDict(parentClass)
-        cls.merge(dict_, Dict)
-      
-        return dict_
-
-
 
 class FunctionsNotAllowedError(Exception):
     def __init__(self, msg=''):
