@@ -1,6 +1,6 @@
 import inspect
 import json
-from objectivechartjs.builderutils import ExtChartUtils, ChartType, FunctionsNotAllowedError
+from objectivechartjs.utils import ChartUtils, ChartType, FunctionsNotAllowedError
 
 
 class BaseChart:
@@ -21,10 +21,10 @@ class BaseChart:
 
 
     def getLabels(self):
-        cleanLabels = ExtChartUtils.cleanClass(self.labels, list)
+        cleanLabels = ChartUtils.cleanClass(self.labels, list)
 
         if not cleanLabels:
-            cleanData = ExtChartUtils.cleanClass(self.data)
+            cleanData = ChartUtils.cleanClass(self.data)
             if 'data' in cleanData.keys():
                 for i in range(len(cleanData['data'])):
                     cleanLabels.append(f'Data{i}')
@@ -41,14 +41,14 @@ class BaseChart:
 
     def getOptions(self):
 
-        cleanOptions = ExtChartUtils.cleanClass(self.options)
+        cleanOptions = ChartUtils.cleanClass(self.options)
         cleanOptions.update(self.getPluginOptions())
         return {'options': cleanOptions}
 
 
     def getDatasets(self):  # TODO:: Add catch for misnamed subsets
 
-        cleanDatasets = ExtChartUtils.cleanClass(self.data)
+        cleanDatasets = ChartUtils.cleanClass(self.data)
 
         subSets = dict([(x, cleanDatasets[x]) for x in cleanDatasets if inspect.isclass(cleanDatasets[x])])
         subFunc = [x for x in cleanDatasets if inspect.isfunction(cleanDatasets[x])]
@@ -64,13 +64,13 @@ class BaseChart:
             subclass = subSets[dataSet]
             if not hasattr(subclass, 'label'):
                 subclass.label = dataSet
-            content.append(ExtChartUtils.cleanClass(subclass))
+            content.append(ChartUtils.cleanClass(subclass))
 
         return {'datasets': content}
 
 
     def getPluginOptions(self):
-        cleanPluginOptions = ExtChartUtils.cleanClass(self.pluginOptions)
+        cleanPluginOptions = ChartUtils.cleanClass(self.pluginOptions)
 
         target = cleanPluginOptions
         plugins = dict([(x, target[x]) for x in target if inspect.isclass(target[x])])
@@ -81,7 +81,7 @@ class BaseChart:
 
         for plugin in plugins:
             subclass = plugins[plugin]
-            content.update({plugin: ExtChartUtils.cleanClass(subclass)})
+            content.update({plugin: ChartUtils.cleanClass(subclass)})
 
         return {'plugins': content}
 
@@ -93,9 +93,6 @@ class BaseChart:
         datastructure.update(self.getDatasets())
 
         options = self.getOptions()
-
-        if type(self.type) is not str:
-            self.type = self.type.value
 
         build = {'type': self.type}
         build.update({'data': datastructure})

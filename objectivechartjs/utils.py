@@ -1,9 +1,7 @@
 import inspect
 import json
-from enum import Enum
 
-
-class ChartType(Enum):
+class ChartType:
 
     Line = 'line'
     Bar = 'bar'
@@ -16,7 +14,7 @@ class ChartType(Enum):
     Bubble = 'bubble'
 
 
-class ExtChartUtils:
+class ChartUtils:
     @classmethod
     def cleanClass(cls, classObj, retType=dict):
 
