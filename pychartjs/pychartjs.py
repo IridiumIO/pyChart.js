@@ -1,6 +1,6 @@
 import inspect
 import json
-from objectivechartjs.utils import ChartUtils, ChartType, FunctionsNotAllowedError
+from pychartjs.utils import ChartUtils, ChartType, FunctionsNotAllowedError
 
 
 class BaseChart:
@@ -101,4 +101,3 @@ class BaseChart:
         js = json.dumps(build)
         js = js.replace('"<<', '').replace('>>"', '')
         return js
-
