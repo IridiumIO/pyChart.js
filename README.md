@@ -1,4 +1,4 @@
-<p align="center"><img src="data/banner.svg" width="500"></p>
+<p align="center"><img src="https://github.com/IridiumIO/pyChart.js/blob/master/data/banner.png" width="500"></p>
 
 &nbsp;
 
