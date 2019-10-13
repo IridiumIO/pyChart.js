@@ -48,30 +48,41 @@ As stated above, the output is a JSON object which can be used directly in any t
 ### 2. Python Code
 The following is a minimal example of a chart you can generate and pass into your HTML using a Django view. 
 
-```python
 
-from pychartjs import BaseChart, ChartType, Color
+
+<table><tbody><tr></tr><tr><td><details><summary><sub><b>Click to see more:</b></sub>
+  <h6>Create Chart</h6>
+
+```python
+from pychartjs import BaseChart, ChartType, Color                                     
 
 class MyBarGraph(BaseChart):
 
     type = ChartType.Bar
 
     class data:
-        label = "My Favourite Numbers"
+        label = "Numbers"
         data = [12, 19, 3, 17, 10]
         backgroundColor = Color.Green
+```
+</summary><hr>
+<h6>Update data label and use it in a Django View</h6>
 
-# ...other logic
-
+```python
 def homepage(request):
 
-    ChartJSON = MyBarGraph().get()
+    NewChart = MyBarGraph()
+    NewChart.data.label = "My Favourite Numbers"      # can change data after creation
+    
+    ChartJSON = NewChart.get()
 
     return render(request=request,
                   template_name='main/home.html',
                   context={"chartJSON": ChartJSON})
 
 ```
+</details></td></tr></tbody>
+</table>
 
 ### 3. The Result
 
