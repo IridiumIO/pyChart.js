@@ -117,6 +117,9 @@ type = 'Bar'
 
 #### In-line JS
 Callbacks to Javascript functions or direct code can be implemented anywhere in the chart class as long as it is a string encapsulated within `<<>>`
+
+- note: Using this will render the output non-compliant to the JSON standard, and as such it likely will not work with AJAX/REST
+
 ```html
 
 callback = "<<myJavascriptFunction>>"
