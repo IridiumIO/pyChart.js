@@ -30,14 +30,14 @@ You will need to have `chart.js` or `chart.min.js` ready for use in your HTML do
 ## Basic Usage
 
 ### 1. Chart Element in HTML and JS
-As stated above, the output is a JSON object which can be used directly in any template. The following is an example HTML document with a simple chart element. Here, the chart object is going to be passed into the `{{ chartJSON }}` tag
+As stated above, the output is a JSON object which can be used directly in any template. The following is an example HTML document with a simple chart element. Here, the chart object is going to be passed into the `{{ chartJSON | safe }}` tag. Note here that it has to be flagged as safe otherwise it will not work.  
 
 ```html
   
 <canvas id="myChart"></canvas>
 
 <script>
-    var data = {{ chartJSON }}
+    var data = {{ chartJSON | safe }}
     var ctx = document.getElementById("myChart").getContext('2d');
     var myChart = new Chart(ctx, data);
 </script>
