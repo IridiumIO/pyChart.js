@@ -316,3 +316,7 @@ class MyChart(BaseChart):
 ### Output
 
 <img src="https://i.imgur.com/cFvajSJ.png" height=400/>
+
+
+## More Examples
+Can be found [here](https://github.com/IridiumIO/pyChart.js/wiki/Line-Charts)
