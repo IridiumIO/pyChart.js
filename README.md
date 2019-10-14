@@ -295,7 +295,7 @@ Construction can be done in a similar fashion to the javascript way as seen [her
 Stops can be added by calling the `addColorStop()` function
 
 
-<table><tbody><tr></tr><tr><td><details><summary><sub><b>Click to see more examples:</b></sub>
+<table><tbody><tr><td><details><summary><sub><b>Click to see more examples:</b></sub>
   <h6>Example One</h6>
 
 ```python
