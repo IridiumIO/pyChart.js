@@ -30,14 +30,14 @@ You will need to have `chart.js` or `chart.min.js` ready for use in your HTML do
 ## Basic Usage
 
 ### 1. Chart Element in HTML and JS
-As stated above, the output is a JSON object which can be used directly in any template. The following is an example HTML document with a simple chart element. Here, the chart object is going to be passed into the `{{ chartJSON }}` tag
+As stated above, the output is a JSON object which can be used directly in any template. The following is an example HTML document with a simple chart element. Here, the chart object is going to be passed into the `{{ chartJSON | safe }}` tag. Note here that it has to be flagged as safe otherwise it will not work.  
 
 ```html
   
 <canvas id="myChart"></canvas>
 
 <script>
-    var data = {{ chartJSON }}
+    var data = {{ chartJSON | safe }}
     var ctx = document.getElementById("myChart").getContext('2d');
     var myChart = new Chart(ctx, data);
 </script>
@@ -48,30 +48,41 @@ As stated above, the output is a JSON object which can be used directly in any t
 ### 2. Python Code
 The following is a minimal example of a chart you can generate and pass into your HTML using a Django view. 
 
-```python
 
-from pychartjs import BaseChart, ChartType, Color
+
+<table><tbody><tr></tr><tr><td><details><summary><sub><b>Click to see more:</b></sub>
+  <h6>Create Chart</h6>
+
+```python
+from pychartjs import BaseChart, ChartType, Color                                     
 
 class MyBarGraph(BaseChart):
 
     type = ChartType.Bar
 
     class data:
-        label = "My Favourite Numbers"
+        label = "Numbers"
         data = [12, 19, 3, 17, 10]
         backgroundColor = Color.Green
+```
+</summary><hr>
+<h6>Update data label and use it in a Django View</h6>
 
-# ...other logic
-
+```python
 def homepage(request):
 
-    ChartJSON = MyBarGraph().get()
+    NewChart = MyBarGraph()
+    NewChart.data.label = "My Favourite Numbers"      # can change data after creation
+    
+    ChartJSON = NewChart.get()
 
     return render(request=request,
                   template_name='main/home.html',
                   context={"chartJSON": ChartJSON})
 
 ```
+</details></td></tr></tbody>
+</table>
 
 ### 3. The Result
 
@@ -117,6 +128,9 @@ type = 'Bar'
 
 #### In-line JS
 Callbacks to Javascript functions or direct code can be implemented anywhere in the chart class as long as it is a string encapsulated within `<<>>`
+
+- note: Using this will render the output non-compliant to the JSON standard, and as such it likely will not work with AJAX/REST
+
 ```html
 
 callback = "<<myJavascriptFunction>>"
@@ -153,10 +167,11 @@ Can be either of:
 - A single dataset, defined directly as variables in the class
 - Multiple datasets, each with their own subclass. 
 
-Mandatory: 
+Rules: 
 
 - Must include a `data` variable of type `list`
 - Must not have functions/methods. These will not work due to the reference methods used internally. However, you can use in-line operators or call to a function *outside* the Chart class. You just can't define a function within the dataset class. 
+- If you don't want a variable to be compiled, prefix it with an underscore, e.g. `_color`
 
 ``` python
 
@@ -313,3 +328,7 @@ class MyChart(BaseChart):
 ### Output
 
 <img src="https://i.imgur.com/cFvajSJ.png" height=400/>
+
+
+## More Examples
+Can be found [here](https://github.com/IridiumIO/pyChart.js/wiki/Line-Charts)
