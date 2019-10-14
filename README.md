@@ -140,6 +140,11 @@ inlineJS = "<<function(value, index, values) {
 
 ```
 
+-----
+## Subclasses
+
+
+
 ### Labels Class
 Used to define the labels used for each data item. If it is left blank, labels will be generated automatically from the first data collection. 
 
@@ -158,6 +163,7 @@ class labels:
     day3 = 'Wed'
 
 ```
+
 
 ### Data Class
 Used to define data *or* datasets. If you only have one dataset, this can be defined directly in the class. Otherwise, use subclasses for each dataset. For each subclass, the name of the class is used as the label if one isn't specified. 
@@ -235,14 +241,16 @@ class pluginOptions:
 
 ```
 
+-----
+
 ## Colors
 Some rudimentary color functions are provided to make generating charts and graphs easier. 
 
 - All colors are returned in a formatted string `'rgba(R, G, B, A)'` regardless of input type
   - Color.Hex() accepts a string or a Hex Integer. 
   - Color.RGBA() accepts either RGB or RGBA values.
-  - `Planned` Color.HSL()
-  - `Planned` Color.HSV()
+  - Color.HSLA()
+  - Color.HSVA()
 
 ```python
 
@@ -275,6 +283,56 @@ p2 = Color.Palette(Color.Hex("#432475"), n=3, generator='lightness')
 
 ```
 
+### Color Gradients
+Linear and Radial gradients can be generated using the `Color.JSLinearGradient` and `Color.JSRadialGradient` objects. **Note that this returns an escaped javascript generator function.**
+Construction can be done in a similar fashion to the javascript way as seen [here](https://www.w3schools.com/tags/canvas_createlineargradient.asp), or alternatively the whole gradient can be build in the constructor. 
+
+- `chartContextName` = javascript chart context that you use in your HTML. Defaults to `'ctx'`. 
+- `x1, y1, x2, y2` (Linear) = start and stop gradient coordinates
+- `x1, y1, r1, x2, y2, r2` (Radial) = start, stop and radii of the circles to generate the gradient between. 
+- `*colorStops` = optional colorstops can be passed through as tuples to condense creation of gradients into one line
+
+Stops can be added by calling the `addColorStop()` function
+
+
+<table><tbody><tr></tr><tr><td><details><summary><sub><b>Click to see more examples:</b></sub>
+  <h6>Example One</h6>
+
+```python
+#Define and apply color separately
+
+_color = Color.JSLinearGradient('ctx', 0, 0, 1000, 0)                    
+_color.addColorStop(0, Color.Blue)
+_color.addColorStop(1, Color.Green)
+
+backgroundColor = _color.returnGradient()
+```
+</summary>
+<h6>Example Two</h6>
+
+```python
+#Inline construction of gradient
+
+backgroundColor = _color.JSLinearGradient('ctx2', 0, 0, 0, 1000,
+                                          (0, Color.Red),
+                                          (1, Color.Blue)
+                                          ).returnGradient()
+```
+</summary>
+<h6>Example Three</h6>
+
+```python
+#Radial Gradient
+
+backgroundColor = _color.JSRadialGradient('ctx2', 50, 50, 0, 50, 50, 100
+                                          (0, Color.Red),
+                                          (1, Color.Blue)
+                                          ).returnGradient()
+```
+</details></td></tr></tbody>
+</table>
+
+-----
 
 ## Putting it all together
 The following is an example of a complex chart that can be created with many of the above features: 
@@ -329,6 +387,83 @@ class MyChart(BaseChart):
 
 <img src="https://i.imgur.com/cFvajSJ.png" height=400/>
 
+
+### Another example
+
+```python
+
+class NewChart(BaseChart):
+
+    type = ChartType.Line
+
+    class labels:
+        Years = list(range(2017, 2023))
+
+    class data:
+        class Whales:
+            data = [80, 60, 100, 80, 90, 60]
+            
+            _color = Color.JSLinearGradient('ctx', 0, 0, 1000, 0)
+            _color.addColorStop(0, Color.Green)
+            _color.addColorStop(1, Color.Purple)
+            
+            borderColor = _color.returnGradient()
+            fill = False
+            pointBorderWidth = 10
+            pointRadius = 3
+
+        class Bears:
+            data = [60, 50, 80, 120, 140, 180]
+            borderColor = Color.JSLinearGradient('ctx', 0, 0, 1000, 0,
+                                                 (0, Color.Red), 
+                                                 (1, Color.Magenta)
+                                                 ).returnGradient()
+            fill = False
+            pointBorderWidth = 10
+            pointRadius = 3
+
+        class Dolphins:
+            data = [150, 80, 60, 30, 50, 30]
+            borderColor = Color.JSLinearGradient('ctx', 0, 0, 1000, 0,
+                                                 (0, Color.Yellow), 
+                                                 (1, Color.Orange)
+                                                 ).returnGradient()
+            fill = False
+            pointBorderWidth = 10
+            pointRadius = 3
+
+    class options:
+
+        title = {
+            "text": "Wildlife Populations", 
+            "display": True, 
+            "fontSize": 18
+            }
+
+        legend = {
+            'position': 'bottom', 
+            'labels': {
+                'fontColor': Color.Gray, 
+                'fullWidth': True
+                }
+            }
+
+        scales = {
+            "yAxes": [{
+                'ticks': {
+                    'beginAtZero': True, 
+                    'padding': 15,
+                    'max': 200
+                    }
+                }]
+            }
+
+```
+### Output
+
+<img src="https://i.imgur.com/EYVsSPI.png" height=400/>
+
+-----
 
 ## More Examples
 Can be found [here](https://github.com/IridiumIO/pyChart.js/wiki/Line-Charts)
