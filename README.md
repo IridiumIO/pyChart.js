@@ -167,10 +167,11 @@ Can be either of:
 - A single dataset, defined directly as variables in the class
 - Multiple datasets, each with their own subclass. 
 
-Mandatory: 
+Rules: 
 
 - Must include a `data` variable of type `list`
 - Must not have functions/methods. These will not work due to the reference methods used internally. However, you can use in-line operators or call to a function *outside* the Chart class. You just can't define a function within the dataset class. 
+- If you don't want a variable to be compiled, prefix it with an underscore, e.g. `_color`
 
 ``` python
 
