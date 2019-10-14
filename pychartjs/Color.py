@@ -1,9 +1,9 @@
-from colorsys import hls_to_rgb, rgb_to_hls
+from colorsys import hls_to_rgb, rgb_to_hls, hsv_to_rgb
 
 
 def RGBA(R: int, G: int, B: int, A=1):
     '''
-    Returns Color as formatted rgba string
+    Returns RGB(A) Color as formatted rgba string
 
     Parameters
     ----------
@@ -44,16 +44,67 @@ def Hex(Hex, internal=False):
     Hex = f'{Hex:08x}' if type(Hex) is int else Hex.lstrip('#')
 
     if len(Hex) == 6:
-        R, G, B = [int(Hex[i : i + 2], 16) for i in (0, 2, 4)]
+        R, G, B = [int(Hex[i: i + 2], 16) for i in (0, 2, 4)]
         A = 1
     if len(Hex) == 8:
-        R, G, B, A = [int(Hex[i : i + 2], 16) for i in (0, 2, 4, 6)]
+        R, G, B, A = [int(Hex[i: i + 2], 16) for i in (0, 2, 4, 6)]
         A = round(A / 255, 3)
 
     if internal:
         return R, G, B, A
 
     return f'rgba({R}, {G}, {B}, {A})'
+
+
+def HSLA(H: float, S: float, L: float, A=1):
+    '''
+    Returns HSL(A) Color as formatted rgba string
+
+    Parameters
+    ----------
+    H : Hue 0-360\n  
+    S : Saturation 0-100\n
+    L : Lightness 0-100\n
+    A : Alpha (optional) 0-100
+    
+    Returns
+    -------
+    String
+    
+    e.g Color.HSLA(90, 20, 40)
+    >>> 'rgba(100, 120, 80, 1)'
+
+    '''
+        
+    H, S, L = H / 360.0, S / 100.0, L / 100.0
+    R, G, B = tuple(int(i * 255) for i in hls_to_rgb(H, L, S))
+    
+    return RGBA(R, G, B, A)
+
+
+def HSVA(H: float, S: float, V: float, A=1):
+    '''
+    Returns HSV(A) Color as formatted rgba string
+
+    Parameters
+    ----------
+    H : Hue 0-360\n  
+    S : Saturation 0-100\n
+    V : Value 0-100\n
+    A : Alpha (optional) 0-100
+    
+    Returns
+    -------
+    String
+    
+    e.g Color.HSLA(90, 20, 40)
+    >>> 'rgba(100, 120, 80, 1)'
+
+    '''
+        
+    H, S, V = H / 360.0, S / 100.0, V / 100.0
+    R, G, B = tuple(int(i * 255) for i in hsv_to_rgb(H, S, V))
+    return RGBA(R, G, B, A)
 
 
 def Palette(BaseColor, n=5, generator='saturation'):
@@ -229,38 +280,29 @@ class JSRadialGradient(JSLinearGradient):
             self.addColorStop(stop[0], stop[1])
         
        
-
-
-
-
 #Colors below thanks to Sasha Trubetskoy: 
 # https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
 
-
-Red      = Hex(0xE6194BFF)
-Green    = Hex(0x3CB44BFF)
-Yellow   = Hex(0xFFE119FF)
-Blue     = Hex(0x4363D8FF)
-Orange   = Hex(0xF58231FF)
-Purple   = Hex(0x911EB4FF)
-Cyan     = Hex(0x42D4F4FF)
-Magenta  = Hex(0xF032E6FF)
-Lime     = Hex(0xBFEF45FF)
-Pink     = Hex(0xFABEBEFF)
-Teal     = Hex(0x469990FF)
-Lavender = Hex(0xE6BEFFFF)
-Brown    = Hex(0x9A6324FF)
-Beige    = Hex(0xFFFAC8FF)
-Maroon   = Hex(0x800000FF)
-Mint     = Hex(0xAAFFC3FF)
-Olive    = Hex(0x808000FF)
-Apricot  = Hex(0xFFD8B1FF)
-Navy     = Hex(0x000075FF)
-Gray     = Hex(0xA9A9A9FF)
-White    = Hex(0xFFFFFFFF)
-Black    = Hex(0x000000FF)
+Red         = Hex(0xE6194BFF)
+Green       = Hex(0x3CB44BFF)
+Yellow      = Hex(0xFFE119FF)
+Blue        = Hex(0x4363D8FF)
+Orange      = Hex(0xF58231FF)
+Purple      = Hex(0x911EB4FF)
+Cyan        = Hex(0x42D4F4FF)
+Magenta     = Hex(0xF032E6FF)
+Lime        = Hex(0xBFEF45FF)
+Pink        = Hex(0xFABEBEFF)
+Teal        = Hex(0x469990FF)
+Lavender    = Hex(0xE6BEFFFF)
+Brown       = Hex(0x9A6324FF)
+Beige       = Hex(0xFFFAC8FF)
+Maroon      = Hex(0x800000FF)
+Mint        = Hex(0xAAFFC3FF)
+Olive       = Hex(0x808000FF)
+Apricot     = Hex(0xFFD8B1FF)
+Navy        = Hex(0x000075FF)
+Gray        = Hex(0xA9A9A9FF)
+White       = Hex(0xFFFFFFFF)
+Black       = Hex(0x000000FF)
 Transparent = Hex(0x00000000)
-
-
-if __name__ == "__main__":
-    Palette(Red, 'h', 5)
