@@ -35,7 +35,7 @@ def Hex(Hex, internal=False):
             RGB MUST be padded to 8 long by adding FF to the end
             
     Returns
-    -------
+    ------- 
     String
 
     >>> 'rgba(103, 58, 183, 1.0)'
@@ -113,6 +113,126 @@ def Palette(BaseColor, n=5, generator='saturation'):
 
     return LS
 
+
+class JSLinearGradient: 
+    '''
+    Generates a Javascript function that creates a Linear CanvasGradient object when
+    used in HTML/JS
+    - Usable within pyChart.JS chart objects
+
+    Returns
+    -------
+    string (pyChart.JS escaped)\n
+            Javascript function generator of the form "<<function(){...}()>>"
+    '''
+    
+    
+    def __init__(self, chartContextName="ctx", x1=0, y1=0, x2=1000, y2=0, *colorstops: tuple):
+        '''
+        Initialises the LinearGradient Object
+        
+        Parameters
+        ----------
+        chartContextName : str, optional\n
+            name of the Canvas ChartContext to use, by default "ctx"
+        x1, y1, x2, y2: int\n
+            Coordinates to render the gradient through. 
+        
+        *colorstops: tuples, optional\n
+        
+            any number of color stops in the form (stopPosition, Color)\n
+                
+                - stopPosition must be a decimal 0 <= 1 
+        '''
+        
+        
+        self.ctx = chartContextName
+        self.coordinates = x1, y1, x2, y2
+        self.gradientType = 'createLinearGradient'
+        self.ColorStops = []
+        
+        for stop in colorstops:
+            self.addColorStop(stop[0], stop[1])
+        
+        
+        
+    def addColorStop(self, stop: float, color: str):
+        '''
+        adds a Color Stop to the JSGradient Object
+        
+        Parameters
+        ----------
+        stop : float\n
+            Value 0<=1\n
+        color : str\n
+            Color to use, either as a pyChart.js Color() object or a string.
+        '''
+        
+        self.ColorStops.append((stop, color))
+    
+    
+    
+    def returnGradient(self):
+        JSOPEN = "<<(function(){ "
+        JSCLOSE = "return gradient})()>>"
+        VARGRADIENT = f'var gradient = {self.ctx}.{self.gradientType}{self.coordinates}; '
+        
+        ret = JSOPEN + VARGRADIENT
+        
+        for clr in self.ColorStops:
+            ret += f"gradient.addColorStop({clr[0]}, '{clr[1]}'); "
+        
+        ret += JSCLOSE   
+        return ret
+    
+    
+    
+    def __repr__(self):
+        return self.returnGradient()
+
+
+class JSRadialGradient(JSLinearGradient):
+    '''
+    Generates a Javascript function that creates a Radial CanvasGradient object when
+    used in HTML/JS
+    - Usable within pyChart.JS chart objects
+
+    Returns
+    -------
+    string (pyChart.JS escaped)\n
+            Javascript function generator of the form "<<function(){...}()>>"
+    '''
+    
+    def __init__(self, chartContextName='ctx', x1=0, y1=0, r1=0, x2=1000, y2=0, r2=0, *colorstops):
+        '''
+        Initialises the RadialGradient Object
+        
+        Parameters
+        ----------
+        chartContextName : str, optional\n
+            name of the Canvas ChartContext to use, by default "ctx"
+        x1, y1, r1, x2, y2, r2: int\n
+            Coordinates and radii of two circles to render the gradient through. 
+        
+        *colorstops: tuples, optional\n
+        
+            any number of color stops in the form (stopPosition, Color)\n
+                
+                - stopPosition must be a decimal 0 <= 1 
+        '''
+
+        self.ctx = chartContextName
+        self.coordinates = x1, y1, r1, x2, y2, r2
+        self.gradientType = 'createRadialGradient'
+        self.ColorStops = [] 
+        for stop in colorstops:
+            self.addColorStop(stop[0], stop[1])
+        
+       
+
+
+
+
 #Colors below thanks to Sasha Trubetskoy: 
 # https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
 
@@ -138,7 +258,8 @@ Apricot  = Hex(0xFFD8B1FF)
 Navy     = Hex(0x000075FF)
 Gray     = Hex(0xA9A9A9FF)
 White    = Hex(0xFFFFFFFF)
-Black    = Hex(0x000000FF) 
+Black    = Hex(0x000000FF)
+Transparent = Hex(0x00000000)
 
 
 if __name__ == "__main__":
