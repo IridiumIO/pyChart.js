@@ -1,4 +1,4 @@
-<p align="center"><img src="data/banner.svg" width="500"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/IridiumIO/pyChart.js/master/data/banner.png" width="500"></p>
 
 &nbsp;
 
@@ -200,23 +200,40 @@ class data:
 ```
 
 ### Options Class
-Define extended options here. Note however that plugin options get defined under their own heading, *not* in here (to avoid over-nesting). Options defined here are often going to be in dictionary format, but common functions such as legend visibility, title text, etc. will be provided as shortcuts (`Planned`). 
+Define extended options here. Note however that plugin options get defined under their own heading, *not* in here (to avoid over-nesting). 
+Options can be defined either as dictionaries or by using the `Options.Generic()` object. builders for `Title`, `Legend`, `Legend Labels` and `Layout` are provided for convenience. 
 
 Can include: 
 
 - Top-level options as variables
-- Deeper options as dictionaries
+- Deeper options as dictionaries or `Options.Generic` objects
 - callbacks or javascript functions can be included if the variable is surrounded by `<< >>` tags
 
 ```python
 
 class options: 
 
-    title = {"text": "My Fruit Consumption", "display": True}
+    # Object-based
+    title = Options.Title("My Fruit Consumption") 
+    animation = Options.Generic(duration=1000)
 
+    _labels = Options.Legend_Labels(fonColor=Color.Gray, fullwidth=True)
+    legend = Options.Legend(position='bottom', labels=_labels)
+
+
+    # Dictionary-based
+    title = {"text": "My Fruit Consumption", "display": True} 
     animation = {"duration": 1000}
     hover = {"animationDuration": 500 }
     responsiveAnimationDuration = 0
+
+    legend = {
+            'position': 'bottom', 
+            'labels': {
+                'fontColor': Color.Gray, 
+                'fullWidth': True
+                }
+            }
 
 ```
 
@@ -364,7 +381,7 @@ class MyChart(BaseChart):
     
     class options: 
         
-        title = {"text": "Apples I've eaten compared to total daily energy", "display": True}
+        title = Options.Title("Apples I've eaten compared to total daily energy")
         
         scales = {
             "yAxes": [
@@ -434,29 +451,14 @@ class NewChart(BaseChart):
 
     class options:
 
-        title = {
-            "text": "Wildlife Populations", 
-            "display": True, 
-            "fontSize": 18
-            }
-
-        legend = {
-            'position': 'bottom', 
-            'labels': {
-                'fontColor': Color.Gray, 
-                'fullWidth': True
-                }
-            }
-
-        scales = {
-            "yAxes": [{
-                'ticks': {
-                    'beginAtZero': True, 
-                    'padding': 15,
-                    'max': 200
-                    }
-                }]
-            }
+        title   = Options.Title(text="Wildlife Populations", fontSize=18)
+        
+        _lables = Options.Legend_Labels(fontColor=Color.Gray, fullWidth=True)
+        legend  = Options.Legend(position='Bottom', labels=_lables)
+        
+        _yAxes = [Options.General(ticks=Options.General(beginAtZero=True, padding=15, max=200))]
+        
+        scales = Options.General(yAxes=_yAxes)
 
 ```
 ### Output

@@ -1,6 +1,8 @@
 .vscode/
+.pytest_cache/
 build/
 dist/
+tests/
 *.egg-info/
 *.pyc
 test.py

@@ -1,7 +1,7 @@
 import inspect
 import json
 from pychartjs.utils import ChartUtils, ChartType, FunctionsNotAllowedError
-
+from pychartjs.Opt import General
 
 class BaseChart:
 
@@ -35,13 +35,12 @@ class BaseChart:
         if len(cleanLabels) == 1: 
             cleanLabels = cleanLabels[0]
 
-
         return {'labels': cleanLabels}
 
 
     def getOptions(self):
 
-        cleanOptions = ChartUtils.cleanClass(self.options)
+        cleanOptions = ChartUtils.cleanClass(self.options, General)
         cleanOptions.update(self.getPluginOptions())
         return {'options': cleanOptions}
 

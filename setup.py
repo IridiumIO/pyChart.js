@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyChart.JS",
-    version="0.2.0",
+    version="0.3.0",
     author="Iridium IO, ImminentFate",
     author_email="iridium.io@outlook.com",
     description="A clean, class-based implementation of Chart.JS for Django, Flask and any other Python project",
@@ -25,5 +25,5 @@ setuptools.setup(
         "Framework :: Django",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    python_requires='>=3.0',
+    python_requires='>=3.6',
 )

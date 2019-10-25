@@ -1,5 +1,7 @@
 import inspect
 import json
+from pychartjs import Opt
+
 
 class ChartType:
 
@@ -24,9 +26,29 @@ class ChartUtils:
 
         if retType is list:
             cleaned = [variables[n] for n in variables if (not n.startswith('_') and not inspect.isfunction(variables[n]))]
+        elif retType is Opt.General:
+            variables = variables.copy()
+            for k, v in variables.items():
+                if isinstance(v, Opt.General):
+                    variables[k] = v.build()
+                elif isinstance(v, list):
+                    variables[k] = ChartUtils.cleanOptionsList(v)
+            cleaned = dict([(n, variables[n]) for n in variables if (not n.startswith('_') and not inspect.isfunction(variables[n]))])
         else:
             cleaned = dict([(n, variables[n]) for n in variables if (not n.startswith('_') and not inspect.isfunction(variables[n]))])
         return cleaned
+    
+    @classmethod
+    def cleanOptionsList(cls, lst):
+        retlist = []
+        for item in lst: 
+            if isinstance(item, Opt.General):
+                retlist.append(item.build())
+            elif isinstance(item, list):
+                retlist.append(ChartUtils.cleanOptionsList(item))
+            else:
+                retlist.append(item)
+        return retlist
 
 
 class FunctionsNotAllowedError(Exception):
