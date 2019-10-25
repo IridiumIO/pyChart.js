@@ -90,7 +90,7 @@ def homepage(request):
 
 
 ## Extending With More Features
-The above is what's achievable with minimal code but you can do almost anything the JS equivalent can do. Where a feature isn't implemented natively in ObjectiveChartJS, you can use a dictionary or list as per normal.
+The above is what's achievable with minimal code but you can do almost anything the JS equivalent can do. Where a feature isn't implemented natively in pyChart.js, you can use a dictionary or list as per normal.
 
 Here's a skeleton of what can be used: 
 
@@ -330,7 +330,7 @@ backgroundColor = _color.returnGradient()
 ```python
 #Inline construction of gradient
 
-backgroundColor = _color.JSLinearGradient('ctx2', 0, 0, 0, 1000,
+backgroundColor = Color.JSLinearGradient('ctx2', 0, 0, 0, 1000,
                                           (0, Color.Red),
                                           (1, Color.Blue)
                                           ).returnGradient()
@@ -341,7 +341,7 @@ backgroundColor = _color.JSLinearGradient('ctx2', 0, 0, 0, 1000,
 ```python
 #Radial Gradient
 
-backgroundColor = _color.JSRadialGradient('ctx2', 50, 50, 0, 50, 50, 100
+backgroundColor = Color.JSRadialGradient('ctx2', 50, 50, 0, 50, 50, 100
                                           (0, Color.Red),
                                           (1, Color.Blue)
                                           ).returnGradient()
