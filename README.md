@@ -24,7 +24,8 @@ Install with `pip`
 You will need to have `chart.js` or `chart.min.js` ready for use in your HTML document. The following is a drop-in CDN script to use:
 
 ```HTML
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+2.8.0:  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+3.9.1:  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 ```
 
 ## Basic Usage
@@ -200,6 +201,9 @@ class data:
 ```
 
 ### Options Class
+
+**NOTE:** Chart.JS 3.0 introduced many significant changes to how the Options are laid out. The examples below work for 2.94 and below but need modification if you're using 3.0 or higher. (For example `scales` is no longer a list of dictionary items). 
+
 Define extended options here. Note however that plugin options get defined under their own heading, *not* in here (to avoid over-nesting). 
 Options can be defined either as dictionaries or by using the `Options.Generic()` object. builders for `Title`, `Legend`, `Legend Labels` and `Layout` are provided for convenience. 
 
