@@ -72,11 +72,9 @@ class BaseChart:
         cleanPluginOptions = ChartUtils.cleanClass(self.pluginOptions)
 
         target = cleanPluginOptions
-        plugins = dict([(x, target[x]) for x in target if inspect.isclass(target[x])])
-        otherOptions = dict([(x, target[x]) for x in target if not inspect.isclass(target[x])])
+        plugins = dict([(x, target[x]) for x in target])
 
         content = {}
-        content.update(otherOptions)
 
         for plugin in plugins:
             subclass = plugins[plugin]
