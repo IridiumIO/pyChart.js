@@ -31,7 +31,9 @@ You will need to have `chart.js` or `chart.min.js` ready for use in your HTML do
 ## Basic Usage
 
 ### 1. Chart Element in HTML and JS
-As stated above, the output is a JSON object which can be used directly in any template. The following is an example HTML document with a simple chart element. Here, the chart object is going to be passed into the `{{ chartJSON | safe }}` tag. Note here that it has to be flagged as safe otherwise it will not work.  
+As stated above, the output is a JSON object which can be used directly in any template. The following is an example HTML document with a simple chart element. Here, the chart object is going to be passed into the `{{ chartJSON | safe }}` tag. 
+> [!IMPORTANT]
+> The element has to be flagged as `safe` otherwise it will not work!  
 
 ```html
   
@@ -130,7 +132,8 @@ type = 'Bar'
 #### In-line JS
 Callbacks to Javascript functions or direct code can be implemented anywhere in the chart class as long as it is a string encapsulated within `<<>>`
 
-- note: Using this will render the output non-compliant to the JSON standard, and as such it likely will not work with AJAX/REST
+> [!NOTE]
+> Using this will render the output non-compliant to the JSON standard, and as such it may not work properly with AJAX/REST
 
 ```html
 
@@ -202,7 +205,8 @@ class data:
 
 ### Options Class
 
-**NOTE:** Chart.JS 3.0 introduced many significant changes to how the Options are laid out. The examples below work for 2.94 and below but need modification if you're using 3.0 or higher. (For example `scales` is no longer a list of dictionary items). 
+> [!IMPORTANT]
+> Chart.JS 3.0 introduced many significant changes to how the Options are laid out. The examples below work for 2.94 and below but need modification if you're using 3.0 or higher. (For example `scales` is no longer a list of dictionary items). 
 
 Define extended options here. Note however that plugin options get defined under their own heading, *not* in here (to avoid over-nesting). 
 Options can be defined either as dictionaries or by using the `Options.Generic()` object. builders for `Title`, `Legend`, `Legend Labels` and `Layout` are provided for convenience. 
